@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css"rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap" rel="stylesheet"/>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/3.3.0/mdb.min.css" rel="stylesheet"/>
+    <link rel="stylesheet" href="/main.css">
+    <title>Correo electronico</title>
+</head>
+<body>
+    <div class="container p-4">
+        <div class="row">
+            <div class="col-md-6 offset-md-3">
+                <div class="card">
+                    <div class="card-body">
+                        <form action="/send-email" method="POST" enctype="multipart/form-data">
+                            <div class="form group mb-2">
+                                <input type="email" class="form-control" name="emailPara" placeholder="Para" required autofocus> 
+                            </div>
+                            <div class="form-group mb-2">
+                                <input type="text" class="form-control" name="asunto" placeholder="Asunto" required> 
+                            </div>
+                            <div class="form group mb-2">
+                                <input type="email" class="form-control" name="emailDe" placeholder="De" required> 
+                            </div>
+                            <div class="form group mb-2">
+                                <input multiple type="file" class="form-control" name="adjunto" placeholder="Archivo adjunto" > 
+                            </div>
+                            <div class="form-group mb-2">
+                                <textarea class="form-control" name="mensaje" rows="5" required placeholder="Cuerpo de correo"></textarea>
+                            </div>
+
+                            <button class="btn btn-success btn-block">Enviar</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+<!-- MDB -->
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/3.3.0/mdb.min.js"></script>
+</html>
