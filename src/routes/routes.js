@@ -6,7 +6,7 @@ const fs = require('fs');
 const path = require('path');
 require('dotenv').config();
 
-
+//multer function for storage in disk
 const Storage = multer.diskStorage({
     destination:(request, file, callback)=>{
         callback(null, './src/temp')
@@ -16,6 +16,7 @@ const Storage = multer.diskStorage({
     }
 });
 
+//middleware
 const Upload = multer({
     storage: Storage
 }).any('adjunto');
