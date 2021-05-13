@@ -9,4 +9,4 @@
 * `npm run dev`
 
 ## Comentario
-*Para usar con ***gmail*** activar el acceso de aplicaciones poco seguras en la cuenta
+* Para usar con ***gmail*** activar el acceso de aplicaciones poco seguras en la cuenta
