@@ -6,7 +6,6 @@ const fs = require('fs');
 const path = require('path');
 require('dotenv').config();
 
-//multer function for storage in disk
 const Storage = multer.diskStorage({
     destination:(request, file, callback)=>{
         callback(null, './src/temp')
@@ -16,42 +15,37 @@ const Storage = multer.diskStorage({
     }
 });
 
-//middleware
 const Upload = multer({
     storage: Storage
 }).any('adjunto');
 
-router.post('/send-email', (request, response)=>{
+router.post('/send-mail', (request, response)=>{
     
     Upload(request, response, (err) => {
-        if(err){
-            console.error(err);
-            return response.end('Ocurrió un error inesperado');
-        }else{
-            let emailPara;
-            let asunto;
-            let emailDe;
-            let adjunto;
-            let mensaje;
-            emailPara = request.body.emailPara;
-            asunto = request.body.asunto;
-            emailDe = request.body.emailDe;
-            adjunto = request.files;
-            mensaje = request.body.mensaje;
+        if(!err){
 
-            const attachments = adjunto.map((file)=>{
+            let emailFor, subject, emailFrom, attachment, message;
+            emailFor = request.body.emailFor;
+            subject = request.body.subject;
+            emailFrom = request.body.emailFrom;
+            attachment = request.files;
+            message = request.body.message;
+
+            const attachments = attachment.map((file)=>{
                 return { path: file.path };
             });
 
             contentHTML = `
-                <p>${mensaje}</p>`;
+                <div>${mensaje}</div>`;
 
             const trasnporter = nodemailer.createTransport({
+                //read nodemailer documentation
                 //or host
                 service: 'gmail',
                 //port: 26,
                 //secure: true,
-                auth: {
+                auth: {              
+                    //replace with your credentials          
                     user: process.env.MAIL,
                     pass: process.env.PASS_MAL
                 },
@@ -61,32 +55,65 @@ router.post('/send-email', (request, response)=>{
             });
 
             const mailOptions = {
-                from: "'Yeltsin López' <"+emailDe+">",
-                to: emailPara,
-                subject: asunto,
+                from: "'MailerNode' <"+emailFrom+">",
+                to: emailFor,
+                subject: subject,
                 html: contentHTML,
                 attachments: attachments
             }
 
             trasnporter.sendMail(mailOptions, (err, info)=>{
-                if(err){
-                    console.error(err);
-                }else{
-                    console.log("enviado: ", info);
-                    const directory = 'src/temp';
+                if(!err){
                     fs.readdir(directory, (err, files) => {
-                        if (err) throw err;
-                        for (const file of files) {
-                            fs.unlink(path.join(directory, file), err => {
-                                if (err) {
-                                    throw err;
-                                }else{
-                                    return response.redirect('/success.html');
+                        if(!err){
+                            if (!files.length) {
+                                return res.send({
+                                    success_message: 'mail sent successfully without attachments',
+                                    info: info,
+                                    fail: false
+                                });
+                            }else{
+                                for (const file of files) {
+                                    fs.unlink(path.join(directory, file), err => {
+                                        if (!err) {
+                                            return res.send({
+                                                success_message: 'mail sent successfully with attachments',
+                                                info: info,
+                                                fail: false
+                                            });
+                                        }else{
+                                            return res.send({
+                                                error_message: err,
+                                                error_from: 'unlink function',
+                                                fail: true
+                                            });
+                                        }
+                                    });
                                 }
+                            }
+                        }else{
+                            return res.send({
+                                error_message: err,
+                                error_from: 'readdir function',
+                                fail: true
                             });
                         }
                     });
+
+                }else{
+                    return res.send({
+                        error_message: err,
+                        error_from: 'transporter function',
+                        fail: true
+                    });
                 }
+            });
+
+        }else{
+            return res.send({
+                error_message: err,
+                error_from: 'upload function',
+                fail: true
             });
         }
     })
