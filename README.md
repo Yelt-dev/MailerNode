@@ -1,6 +1,12 @@
 # MailerNode
-Aplicación web para enviar correos electrónicos automatizados
 
-#Instalacion
+## Descripción
+*REST API para enviar correos electrónicos*
 
-npm install
+## Instalacion
+
+* `npm install`
+* `npm run dev`
+
+## Comentario
+*Para usar con ***gmail*** activar el acceso de aplicaciones poco seguras en la cuenta
