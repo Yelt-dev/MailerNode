@@ -10,5 +10,5 @@ app.use(require('./routes/routes'));
 app.use(static(path.join(__dirname, 'public')));
 
 app.listen( 3000, () =>{
-     console.log("server running");
+     console.log("server running in port 3000");
 })
